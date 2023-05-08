@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">simplenbaapp</string>
+    <string name="error_text">An Error occurred while loading Data.</string>
+    <string name="home_string"><![CDATA[< Home]]></string>
+    <string-array name="order_array">
+        <item>Name</item>
+        <item>City</item>
+        <item>Conference</item>
+    </string-array>
 </resources>
