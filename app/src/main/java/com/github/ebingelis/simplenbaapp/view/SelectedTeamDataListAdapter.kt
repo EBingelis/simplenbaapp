@@ -11,8 +11,6 @@ import com.github.ebingelis.simplenbaapp.model.SelectedTeamData
 class SelectedTeamDataListAdapter(var teams: ArrayList<SelectedTeamData>) :
     RecyclerView.Adapter<SelectedTeamDataListAdapter.SelectedTeamDataViewHolder>() {
 
-
-
     fun updateTeam(team: List<SelectedTeamData>) {
         teams.addAll(team)
         notifyDataSetChanged()

@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class TeamViewModel: ViewModel() {
+class TeamsViewModel: ViewModel() {
 
-    private val currentOrdering = MutableLiveData("Name")
+    val currentOrdering = MutableLiveData("Name")
     val teams = MutableLiveData<List<TeamsData>>()
     val teamsLoadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
@@ -35,7 +35,6 @@ class TeamViewModel: ViewModel() {
             "Conference" -> lastDataMutableList.sortBy { it.conference }
         }
         teams.value = lastDataMutableList
-        println(teams.value)
     }
 
     private fun fetchTeamsData(){

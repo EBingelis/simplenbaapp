@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ebingelis.simplenbaapp.R
 import com.github.ebingelis.simplenbaapp.databinding.HomePageTabBinding
-import com.github.ebingelis.simplenbaapp.viewmodel.TeamViewModel
+import com.github.ebingelis.simplenbaapp.viewmodel.TeamsViewModel
 
 class HomeFragment: Fragment() {
 
     private var _binding: HomePageTabBinding? = null
 
-    lateinit var viewModel: TeamViewModel
+    lateinit var viewModel: TeamsViewModel
     private val teamsAdapter = TeamsListAdapter(arrayListOf())
     private lateinit var listError: TextView
     private lateinit var loading: ProgressBar
@@ -40,7 +40,7 @@ class HomeFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 //how to initiate view model
-        viewModel = ViewModelProvider(this)[TeamViewModel::class.java]
+        viewModel = ViewModelProvider(this)[TeamsViewModel::class.java]
         viewModel.refresh()
 
         teamsList = binding.teamsList

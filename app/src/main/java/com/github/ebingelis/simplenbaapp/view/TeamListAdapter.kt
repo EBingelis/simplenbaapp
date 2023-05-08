@@ -13,6 +13,7 @@ class TeamsListAdapter(var teams: ArrayList<TeamsData>) :
     RecyclerView.Adapter<TeamsListAdapter.TeamsViewHolder>() {
 
     fun updateTeams(team: List<TeamsData>) {
+        teams.clear()
         teams.addAll(team)
         notifyDataSetChanged()
     }
