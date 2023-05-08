@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,50 +12,54 @@ import com.github.ebingelis.simplenbaapp.R
 import com.github.ebingelis.simplenbaapp.viewmodel.SelectedTeamViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class TeamBottomSheetView(private val context: Context, private val teamName: String){
+class TeamBottomSheetView(private val context: Context, private val teamName: String) {
 
     lateinit var viewModel: SelectedTeamViewModel
     private val selectedTeamAdapter = SelectedTeamDataListAdapter(arrayListOf())
-    lateinit var listError: TextView
-    lateinit var loading: ProgressBar
+    private lateinit var listError: TextView
+    private lateinit var loading: ProgressBar
     lateinit var selectedTeamList: RecyclerView
-    lateinit var homeButton: AppCompatButton
-    private val activity = context as AppCompatActivity
+    private lateinit var homeButton: AppCompatButton
+    private val activity = context as MainActivity
 
     fun show(id: Int) {
 
         val bottomSheetDialog = BottomSheetDialog(context)
 
-        // Inflate the layout for the bottom sheet
-        val bottomSheetView = bottomSheetDialog.layoutInflater.inflate(R.layout.selected_team_data, null)
+        val bottomSheetView = bottomSheetDialog.layoutInflater.inflate(
+            R.layout.selected_team_data,
+            activity.mainView,
+            false
+        )
 
-        // Set the content view of the bottom sheet dialog
         bottomSheetDialog.setContentView(bottomSheetView)
 
-        // Set any other properties of the bottom sheet dialog, if needed
         bottomSheetDialog.setCancelable(true)
+
         bottomSheetDialog.setCanceledOnTouchOutside(true)
 
-        // Show the bottom sheet dialog
         bottomSheetDialog.show()
 
         selectedTeamList = bottomSheetView.findViewById(R.id.selected_team_list_view)
 
         viewModel = ViewModelProvider(activity)[SelectedTeamViewModel::class.java]
+
         viewModel.refresh(id)
 
         listError = bottomSheetView.findViewById(R.id.selected_team_data_list_error)
+
         loading = bottomSheetView.findViewById(R.id.selected_team_data_loading_view)
+
         homeButton = bottomSheetView.findViewById(R.id.home_button)
 
         val teamNameView = bottomSheetView.findViewById<TextView>(R.id.team_name_text_view)
 
         homeButton.setOnClickListener {
-            selectedTeamAdapter.deleteTeam()
             bottomSheetDialog.dismiss()
         }
 
         bottomSheetDialog.setOnDismissListener {
+            selectedTeamList.removeAllViews()
             removeObservers()
         }
 
@@ -84,7 +87,7 @@ class TeamBottomSheetView(private val context: Context, private val teamName: St
 
     }
 
-    private fun removeObservers(){
+    private fun removeObservers() {
 
         viewModel.selectedTeamsData.removeObservers(activity)
         viewModel.additionalSelectedTeamsData.removeObservers(activity)

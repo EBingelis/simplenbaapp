@@ -17,7 +17,7 @@ import com.github.ebingelis.simplenbaapp.R
 import com.github.ebingelis.simplenbaapp.databinding.HomePageTabBinding
 import com.github.ebingelis.simplenbaapp.viewmodel.TeamsViewModel
 
-class HomeFragment: Fragment() {
+class HomeFragment : Fragment() {
 
     private var _binding: HomePageTabBinding? = null
 
@@ -39,7 +39,6 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//how to initiate view model
         viewModel = ViewModelProvider(this)[TeamsViewModel::class.java]
         viewModel.refresh()
 
@@ -85,6 +84,14 @@ class HomeFragment: Fragment() {
 
     }
 
+    private fun removeObservers() {
+
+        viewModel.teams.removeObservers(this)
+        viewModel.teamsLoadError.removeObservers(this)
+        viewModel.loading.removeObservers(this)
+
+    }
+
     private fun observeViewModel() {
 
         viewModel.teams.observe(viewLifecycleOwner) { teams ->
@@ -109,11 +116,13 @@ class HomeFragment: Fragment() {
 
     }
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    //needed to reach this fragment
+    override fun onDestroy() {
+        super.onDestroy()
+        removeObservers()
+    }
+
     companion object {
         fun newInstance() = HomeFragment().apply {}
     }

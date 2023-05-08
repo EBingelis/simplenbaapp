@@ -27,7 +27,6 @@ class Teams {
         val response = client.newCall(request).execute()
 
         val responseBody = response.body?.string()
-        println(responseBody)
 
         if (!response.isSuccessful) {
             throw Exception("API request failed with code ${response.code}")

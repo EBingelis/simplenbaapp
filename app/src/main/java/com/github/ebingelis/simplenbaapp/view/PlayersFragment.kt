@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ebingelis.simplenbaapp.databinding.SearchPlayerTabBinding
 import com.github.ebingelis.simplenbaapp.viewmodel.PlayersViewModel
 
-class PlayersFragment: Fragment() {
+class PlayersFragment : Fragment() {
 
     private var _binding: SearchPlayerTabBinding? = null
 
@@ -49,24 +49,48 @@ class PlayersFragment: Fragment() {
 
         observeViewModel()
 
+        playersList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = playersList.layoutManager as LinearLayoutManager
+                val position = layoutManager.findLastVisibleItemPosition()
+
+                if (position == playersAdapter.itemCount - 1) {
+                    if(viewModel.loading.value != true){
+                        viewModel.nextPageData()
+                    }
+                }
+            }
+        })
+
         val searchView = binding.searchBar
 
         searchView.setOnClickListener {
-                // Handle click event
-                searchView.isIconified = false
-                //searchView.requestFocus()
-            }
+
+            searchView.isIconified = false
+
+        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Handle search query submit
-                viewModel.search(query.toString())
+                if (query.toString() != "") {
+                    viewModel.search(query.toString())
+                    viewModel.searching.value = true
+                } else {
+                    viewModel.searching.value = false
+                }
+
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Handle search query text change
-                viewModel.search(newText.toString())
+                if (newText.toString() != "") {
+                    viewModel.search(newText.toString())
+                } else {
+                    playersList.smoothScrollToPosition(0)
+                    viewModel.refresh()
+                }
                 return true
             }
         })
@@ -74,8 +98,13 @@ class PlayersFragment: Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.players.observe(viewLifecycleOwner) { teams ->
-            teams?.let { playersAdapter.updatePlayers(it) }
+
+        viewModel.players.observe(viewLifecycleOwner) { players ->
+            players?.let { playersAdapter.updatePlayers(it) }
+        }
+
+        viewModel.additionalPlayersData.observe(viewLifecycleOwner) { additionalPlayersData ->
+            additionalPlayersData?.let { playersAdapter.addAdditionalPlayers(it) }
         }
 
         viewModel.playersLoadError.observe(viewLifecycleOwner) { isError ->
@@ -85,15 +114,33 @@ class PlayersFragment: Fragment() {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             isLoading?.let {
                 loading.visibility = if (it) View.VISIBLE else View.GONE
-                if (it) {
-                    listError.visibility = View.GONE
-                    playersList.visibility = View.GONE
-                } else {
+                if (it && viewModel.additionalDataLoading.value == true) {
                     playersList.visibility = View.VISIBLE
+                } else {
+                    if (it) {
+                        listError.visibility = View.GONE
+                        playersList.visibility = View.GONE
+                    } else {
+                        playersList.visibility = View.VISIBLE
+                    }
                 }
             }
         }
 
+    }
+
+    private fun removeObservers() {
+
+        viewModel.players.removeObservers(this)
+        viewModel.additionalPlayersData.removeObservers(this)
+        viewModel.loading.removeObservers(this)
+        viewModel.playersLoadError.removeObservers(this)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeObservers()
     }
 
     // This property is only valid between onCreateView and

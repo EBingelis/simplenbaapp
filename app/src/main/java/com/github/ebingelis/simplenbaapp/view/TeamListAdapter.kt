@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ebingelis.simplenbaapp.R
 import com.github.ebingelis.simplenbaapp.model.TeamsData
 
-class TeamsListAdapter(var teams: ArrayList<TeamsData>) :
+class TeamsListAdapter(private var teams: ArrayList<TeamsData>) :
     RecyclerView.Adapter<TeamsListAdapter.TeamsViewHolder>() {
 
     fun updateTeams(team: List<TeamsData>) {

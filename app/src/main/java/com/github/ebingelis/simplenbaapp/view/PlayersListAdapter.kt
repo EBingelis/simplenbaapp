@@ -9,15 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ebingelis.simplenbaapp.R
 import com.github.ebingelis.simplenbaapp.model.PlayersData
 
-class PlayersListAdapter(var players: ArrayList<PlayersData>) :
+class PlayersListAdapter(private var players: ArrayList<PlayersData>) :
     RecyclerView.Adapter<PlayersListAdapter.PlayersViewHolder>() {
 
     fun updatePlayers(newPlayers: List<PlayersData>) {
-
         players.clear()
         players.addAll(newPlayers)
         notifyDataSetChanged()
+    }
 
+    fun addAdditionalPlayers(newPlayers : List<PlayersData>){
+        players.addAll(newPlayers)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PlayersViewHolder(
@@ -32,7 +35,7 @@ class PlayersListAdapter(var players: ArrayList<PlayersData>) :
         val myContext = holder.itemView.context
 
         holder.teamItem.setOnClickListener {
-            TeamBottomSheetView(myContext ,holder.teamNameTextView.text.toString()).show(holder.id)
+            TeamBottomSheetView(myContext, holder.teamNameTextView.text.toString()).show(holder.id)
         }
     }
 

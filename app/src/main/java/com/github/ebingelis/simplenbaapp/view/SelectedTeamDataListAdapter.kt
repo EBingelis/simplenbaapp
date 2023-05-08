@@ -16,36 +16,31 @@ class SelectedTeamDataListAdapter(var teams: ArrayList<SelectedTeamData>) :
         notifyDataSetChanged()
     }
 
-    fun createTeam(team: List<SelectedTeamData>){
+    fun createTeam(team: List<SelectedTeamData>) {
         teams.clear()
         teams.addAll(team)
         notifyDataSetChanged()
     }
 
-    fun deleteTeam(){
-        teams.clear()
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SelectedTeamDataViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.selected_team_data_item, parent, false)
-
-
     )
 
     override fun getItemCount() = teams.size
 
     override fun onBindViewHolder(holder: SelectedTeamDataViewHolder, position: Int) {
         holder.bind(teams[position])
-
     }
 
     class SelectedTeamDataViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val homeTeamFullNameView: TextView = view.findViewById(R.id.home_team_full_name_text_view)
+        private val homeTeamFullNameView: TextView =
+            view.findViewById(R.id.home_team_full_name_text_view)
         private val homeTeamScoreView: TextView = view.findViewById(R.id.home_team_score_text_view)
-        private val visitorTeamFullNameView: TextView = view.findViewById(R.id.visitor_team_full_name_text_view)
-        private val visitorTeamScoreView: TextView = view.findViewById(R.id.visitor_team_score_text_view)
+        private val visitorTeamFullNameView: TextView =
+            view.findViewById(R.id.visitor_team_full_name_text_view)
+        private val visitorTeamScoreView: TextView =
+            view.findViewById(R.id.visitor_team_score_text_view)
 
         fun bind(selectedTeam: SelectedTeamData) {
             homeTeamFullNameView.text = selectedTeam.homeTeamFullName

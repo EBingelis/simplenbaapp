@@ -15,6 +15,7 @@
         android:theme="@style/Theme.Simplenbaapp"
         tools:targetApi="31">
         <activity
+            android:windowSoftInputMode="adjustNothing"
             android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>

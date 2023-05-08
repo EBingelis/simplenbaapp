@@ -12,7 +12,7 @@ import java.lang.Exception
 
 class TeamsViewModel: ViewModel() {
 
-    val currentOrdering = MutableLiveData("Name")
+    private val currentOrdering = MutableLiveData("Name")
     val teams = MutableLiveData<List<TeamsData>>()
     val teamsLoadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()

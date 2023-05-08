@@ -17,27 +17,41 @@ class PlayersViewModel: ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val additionalPlayersData = MutableLiveData<List<PlayersData>>()
     val additionalDataLoading = MutableLiveData<Boolean>()
-    var currentPage = 1
-    var maximumPages = 0
+    val searching = MutableLiveData(false)
+    private var searchString = ""
+    private var currentPage = 1
+    private var maximumPages = 0
 
     fun refresh(){
+        searchString = ""
         fetchPlayersData()
     }
 
-    fun nextPageData(id: Int){
+    fun nextPageData(){
         additionalDataLoading.value = true
         println(currentPage)
         println(maximumPages)
-        if(currentPage < maximumPages){
-            currentPage += 1
-            fetchMorePlayersData(currentPage = currentPage)
+
+        if(currentPage == maximumPages){
+            if(searchString == ""){
+                currentPage = 0
+                fetchMorePlayersData(currentPage = currentPage)
+            }
         }else{
-            currentPage = 0
-            fetchMorePlayersData(currentPage = currentPage)
+
+            currentPage += 1
+            if(searchString == ""){
+                fetchMorePlayersData(currentPage = currentPage)
+            }else{
+                fetchMorePlayersData(searchString, currentPage = currentPage)
+            }
         }
+
     }
 
     fun search(string:String){
+        searchString = string
+        currentPage = 1
         fetchPlayersData(string)
     }
 
@@ -51,26 +65,26 @@ class PlayersViewModel: ViewModel() {
                 }
 
                 val playersClass = Players()
-                val data = playersClass.getPlayersData(string, )
+                val data = playersClass.getPlayersData(string, currentPage)
 
                 withContext(Dispatchers.Main){
                     playersLoadError.value = false
                     loading.value = false
-                    players.value = data
                     maximumPages = playersClass.maximumPages
+                    additionalDataLoading.value = false
+                    additionalPlayersData.value = data
                 }
 
             }catch (e:Exception){
                 withContext(Dispatchers.Main){
                     playersLoadError.value = true
                     loading.value = false
-                    players.value = emptyList()
+                    additionalPlayersData.value = emptyList()
                 }
             }
 
         }
     }
-
     private fun fetchPlayersData(string: String = "", currentPage: Int = 1){
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -80,11 +94,13 @@ class PlayersViewModel: ViewModel() {
                     loading.value = true
                 }
 
-                val data = Players().getPlayersData(string)
+                val playersClass = Players()
+                val data = playersClass.getPlayersData(string, currentPage)
 
                 withContext(Dispatchers.Main){
                     playersLoadError.value = false
                     loading.value = false
+                    maximumPages = playersClass.maximumPages
                     players.value = data
                 }
 
@@ -98,4 +114,5 @@ class PlayersViewModel: ViewModel() {
 
         }
     }
+
 }

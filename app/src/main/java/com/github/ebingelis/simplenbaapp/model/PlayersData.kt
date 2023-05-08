@@ -5,13 +5,18 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-data class PlayersData(val firstName: String?, val lastName: String?, val teamFullName: String?, val teamId: Int?)
+data class PlayersData(
+    val firstName: String?,
+    val lastName: String?,
+    val teamFullName: String?,
+    val teamId: Int?
+)
 
 class Players {
 
     var maximumPages = 0
 
-    suspend fun getPlayersData(string:String, page: Int = 1): List<PlayersData> {
+    suspend fun getPlayersData(string: String, page: Int): List<PlayersData> {
 
         val dataList = mutableListOf<PlayersData>()
 
@@ -20,7 +25,7 @@ class Players {
         val urlBuilder = "https://www.balldontlie.io/api/v1/players".toHttpUrl().newBuilder()
         urlBuilder.addQueryParameter("page", "$page")
 
-        if(string != ""){
+        if (string != "") {
             urlBuilder.addQueryParameter("search", string)
         }
 
@@ -34,7 +39,6 @@ class Players {
         val response = client.newCall(request).execute()
 
         val responseBody = response.body?.string()
-        println(responseBody)
 
         if (!response.isSuccessful) {
             throw Exception("API request failed with code ${response.code}")
@@ -58,7 +62,7 @@ class Players {
                 )
             }
 
-            maximumPages = responseJSON.getJSONObject("meta").getInt("total_count")
+            maximumPages = responseJSON.getJSONObject("meta").getInt("total_pages")
 
         } catch (e: Exception) {
             println(e)

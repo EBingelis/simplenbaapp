@@ -17,8 +17,8 @@ class SelectedTeamViewModel: ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val additionalSelectedTeamsData = MutableLiveData<List<SelectedTeamData>>()
     val additionalDataLoading = MutableLiveData<Boolean>()
-    var currentPage = 1
-    var maximumPages = 0
+    private var currentPage = 1
+    private var maximumPages = 0
 
 
     fun refresh(id:Int){

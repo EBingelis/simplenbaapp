@@ -2,6 +2,20 @@
     <string name="app_name">simplenbaapp</string>
     <string name="error_text">An Error occurred while loading Data.</string>
     <string name="home_string"><![CDATA[< Home]]></string>
+    <string name="home_button_text">Home</string>
+    <string name="players_button_text">Players</string>
+    <string name="home_title_text">Home</string>
+    <string name="name_column_text">Name</string>
+    <string name="city_column_text">City</string>
+    <string name="conference_column_text">Conference</string>
+    <string name="first_name_column_text">First Name</string>
+    <string name="last_name_column_text">Last Name</string>
+    <string name="team_column_text">Team</string>
+    <string name="players_title_text">Players</string>
+    <string name="home_name_text">Home\nName</string>
+    <string name="home_score_text">Home\nScore</string>
+    <string name="visitor_score_text">Visitor\nScore</string>
+    <string name="visitor_name_text">Visitor\nName</string>
     <string-array name="order_array">
         <item>Name</item>
         <item>City</item>
