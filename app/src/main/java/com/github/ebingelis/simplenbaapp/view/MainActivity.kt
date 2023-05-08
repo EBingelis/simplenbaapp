@@ -1,7 +1,8 @@
-package com.github.ebingelis.simplenbaapp
+package com.github.ebingelis.simplenbaapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.github.ebingelis.simplenbaapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
